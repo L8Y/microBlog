@@ -1,0 +1,12 @@
+C:\Users\iknow\source\repos\microblog1\mb_lib\bin\Debug\net6.0\mb_lib.deps.json
+C:\Users\iknow\source\repos\microblog1\mb_lib\bin\Debug\net6.0\mb_lib.dll
+C:\Users\iknow\source\repos\microblog1\mb_lib\bin\Debug\net6.0\ref\mb_lib.dll
+C:\Users\iknow\source\repos\microblog1\mb_lib\bin\Debug\net6.0\mb_lib.pdb
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.AssemblyInfoInputs.cache
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.AssemblyInfo.cs
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.csproj.CoreCompileInputs.cache
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.dll
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\ref\mb_lib.dll
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.pdb
+C:\Users\iknow\source\repos\microblog1\mb_lib\obj\Debug\net6.0\mb_lib.csproj.AssemblyReference.cache
