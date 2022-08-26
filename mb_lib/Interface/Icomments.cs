@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace mb_lib.Interface
 {
-    public interface Icomments
+    public interface IComments
     {
-        public bool addComments(long CommentOwnerId, long PostId, string Comments);
+        public bool AddComments(long CommentOwnerId, long PostId, string Comments);
     }
 }

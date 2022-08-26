@@ -8,9 +8,9 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSession();
-builder.Services.AddScoped<Iregister, RegisterServices>();
-builder.Services.AddScoped<Ipost, PostServices>();
-builder.Services.AddScoped<Icomments, CommentsServices>();
+builder.Services.AddScoped<IRegister, RegisterServices>();
+builder.Services.AddScoped<IPost, PostServices>();
+builder.Services.AddScoped<IComments, CommentsServices>();
 builder.Services.AddDbContext<bloggingContext>(option => option.UseSqlServer("Data Source=DESKTOP-DNK5RHH\\SQLEXPRESS;Initial Catalog=blogging;Integrated Security=True"));
 var app = builder.Build();
 

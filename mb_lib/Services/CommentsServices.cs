@@ -8,22 +8,22 @@ using System.Threading.Tasks;
 
 namespace mb_lib.Services
 {
-    public class CommentsServices : Icomments
+    public class CommentsServices : IComments
     {
         private readonly bloggingContext _context;
         public CommentsServices(bloggingContext context)
         {
               _context = context; 
         }
-        public bool addComments(long CommentOwnerId, long PostId, string Comments)
+        public bool AddComments(long CommentOwnerId, long PostId, string Comments)
         {           
                 DateTime date = DateTime.UtcNow;
-                Comment c = new Comment();
-                c.Comments = Comments;
-                c.CommentOwnerId = CommentOwnerId;
-                c.Date = date;
-                c.PostId = PostId;
-                _context.Comments.Add(c);
+                Comment newComment = new Comment();
+                newComment.Comments = Comments;
+                newComment.CommentOwnerId = CommentOwnerId;
+                newComment.Date = date;
+                newComment.PostId = PostId;
+                _context.Comments.Add(newComment);
                 bool isCommentCreated = _context.SaveChanges() > 0;
                 return isCommentCreated;
         }

@@ -7,36 +7,36 @@ using mb_lib.Interface;
 
 namespace mb_lib.Services
 {
-    public class PostServices : Ipost
+    public class PostServices : IPost
     {
         private readonly bloggingContext _context;
         public PostServices(bloggingContext context)
         {
             _context = context;
         }
-        public int createPost(string post, string category, int PostOwnerId, DateTime date)
+        public int CreatePost(string post, string category, int PostOwnerId, DateTime date)
         {
-            Post p = new Post();
-            p.Category = category;
-            p.PostOwnerId = PostOwnerId;
-            p.Post1 = post;
-            p.Date = date;
-            _context.Posts.Add(p);
+            Post newPost = new Post();
+            newPost.Category = category;
+            newPost.PostOwnerId = PostOwnerId;
+            newPost.Post1 = post;
+            newPost.Date = date;
+            _context.Posts.Add(newPost);
             int isPostCreated = _context.SaveChanges();
             return isPostCreated;
         }
-        public IEnumerable<Post> getPost()
+        public IEnumerable<Post> GetPost()
         {
-            var post = _context.Posts.ToList();
+            var post = _context.Posts;
             return post;
         }
-        public IEnumerable<Post> getPostById(long PostId)
+        public IEnumerable<Post> GetPostById(long PostId)
         {
-            var postById = _context.Posts.Where(p => p.PostId == PostId).ToList();
+            var postById = _context.Posts.Where(p => p.PostId == PostId);
             return postById;
         }
 
-        public int deletePostById(long postId)
+        public int DeletePostById(long postId)
         {
             var postById = _context.Posts.Where(p => p.PostId == postId).FirstOrDefault();
             int isDeleted = 0;

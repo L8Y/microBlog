@@ -7,14 +7,14 @@ namespace microblog.Controllers
 {
     public class HomeController : Controller
     {
-        private readonly Ipost _PostServices;
-        private readonly Icomments _CommentsServices;
-        private readonly Iregister _RegisterServices;
-        public HomeController(Ipost PostServices, Icomments CommentsServices, Iregister RegisterServices)
+        private readonly IPost _postServices;
+        private readonly IComments _commentsServices;
+        private readonly IRegister _registerServices;
+        public HomeController(IPost PostServices, IComments CommentsServices, IRegister RegisterServices)
         {
-            _PostServices = PostServices;
-            _CommentsServices = CommentsServices;
-            _RegisterServices = RegisterServices;   
+            _postServices = PostServices;
+            _commentsServices = CommentsServices;
+            _registerServices = RegisterServices;   
         }
 
         [HttpGet]
@@ -25,7 +25,7 @@ namespace microblog.Controllers
         [HttpPost]
         public ActionResult Register(Register r)
         {
-            int isUserCreated = _RegisterServices.add_user(r);
+            int isUserCreated = _registerServices.AddUser(r);
             if (ModelState.IsValid)
             {
                 if (isUserCreated > 0)
@@ -48,11 +48,11 @@ namespace microblog.Controllers
         [HttpPost]
         public ActionResult Login(string email, string password)
         {
-            bool isUserValid = _RegisterServices.login(email, password);
+            bool isUserValid = _registerServices.Login(email, password);
 
             if (isUserValid)
             {
-                int userId = Convert.ToInt32(_RegisterServices.getUserId(email));
+                int userId = Convert.ToInt32(_registerServices.GetUserId(email));
                 HttpContext.Session.SetInt32("login_userId", userId);
                 HttpContext.Session.SetString("login_email", email);
                 return RedirectToAction("home");
@@ -71,7 +71,7 @@ namespace microblog.Controllers
                 return RedirectToAction("Login");
             }
             ViewBag.test = HttpContext.Session.GetInt32("login_userId");
-            var displayPost = _PostServices.getPost();
+            var displayPost = _postServices.GetPost();
             ViewBag.displayPost = displayPost;
             return View();
         }
@@ -80,9 +80,9 @@ namespace microblog.Controllers
         {
             DateTime date = DateTime.UtcNow;
             int PostOwnerId = (int)HttpContext.Session.GetInt32("login_userId");
-            int isPostCreated = _PostServices.createPost(post, category, PostOwnerId, date);
+            int isPostCreated = _postServices.CreatePost(post, category, PostOwnerId, date);
             ViewBag.test = isPostCreated;
-            var displayPost = _PostServices.getPost();
+            var displayPost = _postServices.GetPost();
             ViewBag.displayPost = displayPost;
             return View();
         }
@@ -90,7 +90,7 @@ namespace microblog.Controllers
         public ActionResult Comments(long PostId)
         {
             ViewBag.postId = PostId;
-            var getPostById = _PostServices.getPostById(PostId);
+            var getPostById = _postServices.GetPostById(PostId);
             ViewBag.getPostById = getPostById;
             return View();
         }
@@ -98,10 +98,10 @@ namespace microblog.Controllers
         public ActionResult Comments(long PostId, string comments)
         {
             ViewBag.postsId = PostId;
-            var getPostById = _PostServices.getPostById(PostId);
+            var getPostById = _postServices.GetPostById(PostId);
             ViewBag.getPostById = getPostById;
             long CommentOwnerId = (long)HttpContext.Session.GetInt32("login_userId");
-            bool isCommentCreated = _CommentsServices.addComments(CommentOwnerId, PostId, comments);
+            bool isCommentCreated = _commentsServices.AddComments(CommentOwnerId, PostId, comments);
             if (isCommentCreated)
             {
                 ViewBag.Message = "Added successfully";
@@ -116,7 +116,7 @@ namespace microblog.Controllers
         [HttpGet]
         public ActionResult delete()
         {
-            var a = _PostServices.deletePostById(50);
+            var a = _postServices.DeletePostById(50);
             return View();
         }
 

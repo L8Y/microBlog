@@ -19,10 +19,10 @@ namespace microblog.Controllers.Tests
         [TestMethod()]
         public void CommentsTest()
         {
-            var commentMock = new Mock<Icomments>();
-            var postMock = new Mock<Ipost>();
-            var registerMpck = new Mock<Iregister>();
-            postMock.Setup(p => p.getPostById(It.IsAny<int>())).Returns(new List<Post>
+            var commentMock = new Mock<IComments>();
+            var postMock = new Mock<IPost>();
+            var registerMpck = new Mock<IRegister>();
+            postMock.Setup(p => p.GetPostById(It.IsAny<int>())).Returns(new List<Post>
             {
                new Post
                {

@@ -7,57 +7,95 @@ using System.Text;
 using System.Threading.Tasks;
 using mb_lib.Interface;
 using Moq;
+using Microsoft.EntityFrameworkCore;
 
 namespace mb_lib.Services.Tests
 {
     [TestClass()]
     public class PostServicesTests
     {
-        [TestMethod()]
+
+        /*[TestMethod()]
         public void PostDeletedTest()
         {
-            var postMock = new Mock<Ipost>();
-            postMock.Setup(p => p.deletePostById(1)).Returns(1);
+            var mockSet = new Mock<DbSet<Post>> ();
+            var mockContext = new Mock<bloggingContext> ();
+            mockContext.Setup(m => m.Posts).Returns(mockSet.Object);
 
-            var isPostDeleted = postMock.Object.deletePostById(1);
+            PostServices ps = new PostServices(mockContext.Object);
+            ps.deletePostById(1);
+            mockSet.Verify(p => p.)
             Assert.AreEqual(1, isPostDeleted);
 
-        }
+        }*/
         [TestMethod()]
         public void PostDeletedFailsTest()
         {
-            var postMock = new Mock<Ipost>();
-            postMock.Setup(p => p.deletePostById(1)).Returns(1);
+            var postMock = new Mock<IPost>();
+            postMock.Setup(p => p.DeletePostById(1)).Returns(1);
 
-            var isPostDeleted = postMock.Object.deletePostById(2);
+            var isPostDeleted = postMock.Object.DeletePostById(2);
             Assert.AreNotEqual(1, isPostDeleted);
 
         }
         [TestMethod()]
 
-        public void CreatePost()
+        public void getPostById()
         {
-            DateTime date = DateTime.Now;
-            var postMock = new Mock<Ipost>();
-            postMock.Setup(p => p.createPost(It.IsAny<string>(),It.IsAny<string>(),It.IsAny<int>(),It.IsAny<DateTime>())).Returns(1);
-            var isPostCreated = postMock.Object.createPost("hi", "asd", 1, date );
-            Assert.AreEqual(1, isPostCreated);
+            var data = new List<Post>
+            {
+                new Post { PostId = 1, PostOwnerId = 100, Post1 = "h" },
+                new Post { PostId = 2, PostOwnerId = 200, Post1 = "h" }
+            }.AsQueryable();
 
+            var mockSet = new Mock<DbSet<Post>>();
+            mockSet.As<IQueryable<Post>>().Setup(m => m.Provider).Returns(data.Provider);
+            mockSet.As<IQueryable<Post>>().Setup(m => m.Expression).Returns(data.Expression);
+            /*mockSet.As<IQueryable<Post>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mockSet.As<IQueryable<Post>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());*/
+
+            var mockContext = new Mock<bloggingContext>();
+            mockContext.Setup(c => c.Posts).Returns(mockSet.Object);
+
+            PostServices ps = new PostServices(mockContext.Object);
+            var post = ps.GetPostById(1);
+            foreach (var p in post)
+            {
+                Assert.AreEqual(1, p.PostId);
+                Assert.AreEqual(100, p.PostOwnerId);
+                Assert.IsNotNull(p.Post1);
+            }
         }
 
         [TestMethod()]
 
-        public void CreatePostFails()
+        public void getPost()
         {
-            DateTime date = DateTime.Now;
-            var postMock = new Mock<Ipost>();
-            postMock.Setup(p => p.createPost(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<int>(), It.IsAny<DateTime>())).Returns(0);
-            var isPostCreated = postMock.Object.createPost("hi", "asd", 1, date);
-            Assert.AreNotEqual(1, isPostCreated);
+            var data = new List<Post>
+            {
+                new Post { PostId = 1, PostOwnerId = 100, Post1 = "h" },
+                new Post { PostId = 2, PostOwnerId = 200, Post1 = "h" }
+            }.AsQueryable();
 
+            var mockSet = new Mock<DbSet<Post>>();
+            mockSet.As<IQueryable<Post>>().Setup(m => m.Provider).Returns(data.Provider);
+            mockSet.As<IQueryable<Post>>().Setup(m => m.Expression).Returns(data.Expression);
+            mockSet.As<IQueryable<Post>>().Setup(m => m.ElementType).Returns(data.ElementType);
+            mockSet.As<IQueryable<Post>>().Setup(m => m.GetEnumerator()).Returns(data.GetEnumerator());
+
+            var mockContext = new Mock<bloggingContext>();
+            mockContext.Setup(c => c.Posts).Returns(mockSet.Object);
+
+            PostServices ps = new PostServices(mockContext.Object);
+            var post = ps.GetPost();
+
+            foreach (var p in post)
+            {
+                Assert.IsNotNull(p.PostId);
+                Assert.IsNotNull(p.PostOwnerId);
+                Assert.IsNotNull(p.Post1);
+            }
         }
-
-
 
     }
 }

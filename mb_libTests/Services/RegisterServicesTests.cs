@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using mb_lib.Interface;
 using Moq;
+using Microsoft.EntityFrameworkCore;
 
 namespace mb_lib.Services.Tests
 {
@@ -14,86 +15,46 @@ namespace mb_lib.Services.Tests
     public class RegisterServicesTests
     {
         [TestMethod()]
-        public void getUserIdTest()
+        public void SuccessfullLoginTest()
         {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.getUserId("abc@g.com")).Returns(1);
-            
-            var registerResult = registerMock.Object.getUserId("abc@g.com");
-            Assert.AreEqual(1, registerResult);
-        }
-
-        [TestMethod()]
-        public void getUseridIfitIsGivenWrongTest()
-        {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.getUserId("abc@g.com")).Returns(1);
-
-            var registerResult = registerMock.Object.getUserId("bc@g.com");
-            Assert.AreEqual(0, registerResult);
-        }
-
-
-        [TestMethod()]
-        public void checkUseridIsNotNullTest()
-        {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.getUserId("abc@g.com")).Returns(1);
-
-            var registerResult = registerMock.Object.getUserId("abc@g.com");
-            Assert.IsNotNull(registerResult);
-        }
-
-        [TestMethod()]
-
-        public void loginTest()
-        {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.login("abc@g.com", "ab")).Returns(true);
-            var loginResult = registerMock.Object.login("abc@g.com", "ab");
-            Assert.IsTrue(loginResult); 
-        }
-        [TestMethod()]
-
-        public void loginFailTest()
-        {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.login("abc@g.com", "ab")).Returns(true);
-            var loginResult = registerMock.Object.login("bc@g.com", "ab");
-            Assert.IsFalse(loginResult);
-        }
-        [TestMethod()]
-        public void registerNewUser()
-        {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.add_user(It.IsAny<Register>())).Returns(1);
-            Register r = new Register()
+            var data = new List<Register>
             {
-                UserId = 1,
-                Name = "ar",
-                Email = "aa@gmail.com",
-                Password = "aa"
-                
-            };
-            int isuserCreated = registerMock.Object.add_user(r);
-            Assert.AreEqual(1, isuserCreated);
-        }
+                new Register {  Email = "a@g.com", Password = "a", Name = "a" },
+                new Register {  Email = "b@g.com", Password = "b", Name = "b" },
+            }.AsQueryable();
 
+            var mockSet = new Mock<DbSet<Register>>();
+            mockSet.As<IQueryable<Register>>().Setup(m => m.Provider).Returns(data.Provider);
+            mockSet.As<IQueryable<Register>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            var mockContext = new Mock<bloggingContext>();
+            mockContext.Setup(c => c.Registers).Returns(mockSet.Object);
+
+            RegisterServices rs = new RegisterServices(mockContext.Object);
+            var login = rs.Login("a@g.com", "a");
+            Assert.IsTrue(login);
+        }
         [TestMethod()]
-        public void registerNewUserFails()
+        public void UnSuccessfullLoginTest()
         {
-            var registerMock = new Mock<Iregister>();
-            registerMock.Setup(m => m.add_user(It.IsAny<Register>())).Returns(0);
-            Register r = new Register()
+            var data = new List<Register>
             {
-                UserId = 1,
-                Name = "ar",
-                Email = "aa@gmail.com"
+                new Register {  Email = "a@g.com", Password = "a", Name = "a" },
+                new Register {  Email = "b@g.com", Password = "b", Name = "b" },
+            }.AsQueryable();
 
-            };
-            int isuserCreated = registerMock.Object.add_user(r);
-            Assert.AreEqual(0, isuserCreated);
+            var mockSet = new Mock<DbSet<Register>>();
+            mockSet.As<IQueryable<Register>>().Setup(m => m.Provider).Returns(data.Provider);
+            mockSet.As<IQueryable<Register>>().Setup(m => m.Expression).Returns(data.Expression);
+
+            var mockContext = new Mock<bloggingContext>();
+            mockContext.Setup(c => c.Registers).Returns(mockSet.Object);
+
+            RegisterServices rs = new RegisterServices(mockContext.Object);
+            var login = rs.Login("ap@gmail.com", "a");
+            Assert.IsFalse(login);
         }
+
 
     }
 }

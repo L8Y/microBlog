@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using mb_lib.Interface;
 using Moq;
+using Microsoft.EntityFrameworkCore;
 
 namespace mb_lib.Services.Tests
 {
@@ -16,23 +17,19 @@ namespace mb_lib.Services.Tests
         [TestMethod()]
         public void addCommentsTest()
         {
-            var commentMock = new Mock<Icomments>();
+            var mockSet = new Mock<DbSet<Comment>>();
+            var mockContext = new Mock<bloggingContext>();
+            mockContext.Setup(m => m.Comments).Returns(mockSet.Object);
 
-            commentMock.Setup(c => c.addComments(1, 10, "yes")).Returns(true);
+            mockSet.Setup(c => c.Add(It.IsAny<Comment>()));
+            CommentsServices cs = new CommentsServices(mockContext.Object);
 
-            var isCommentsAdded = commentMock.Object.addComments(1, 10, "yes");
-            Assert.IsTrue(isCommentsAdded); 
+            bool result = cs.AddComments(1, 2, "h");
+            mockSet.Verify(c => c.Add(It.IsAny<Comment>()), Times.Once());
+            
+            mockContext.Verify(m => m.SaveChanges(), Times.Once());
+            
         }
 
-        [TestMethod()]
-        public void addCommentsFailsTest()
-        {
-            var commentMock = new Mock<Icomments>();
-
-            commentMock.Setup(c => c.addComments(1, 10, "yes")).Returns(true);
-
-            var isCommentsAdded = commentMock.Object.addComments(1, 1, "yes");
-            Assert.IsFalse(isCommentsAdded);
-        }
     }
 }

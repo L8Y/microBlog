@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 
 namespace mb_lib.Interface
 {
-    public interface Ipost
+    public interface IPost
     {
-        public int createPost(string post, string category, int PostOwnerId, DateTime date);
-        public IEnumerable<Post> getPost();
-        public IEnumerable<Post> getPostById(long PostId);
-        public int deletePostById(long postId);
+        public int CreatePost(string post, string category, int PostOwnerId, DateTime date);
+        public IEnumerable<Post> GetPost();
+        public IEnumerable<Post> GetPostById(long PostId);
+        public int DeletePostById(long postId);
+
 
     }
 }

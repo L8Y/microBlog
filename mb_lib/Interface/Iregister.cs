@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace mb_lib.Interface
 {
-    public interface Iregister
+    public interface IRegister
     {
-        public int add_user(Register r);
-        public bool login(string email, string password);
-        public long getUserId(string email);
+        public int AddUser(Register r);
+        public bool Login(string email, string password);
+        public long GetUserId(string email);
     }
 }
